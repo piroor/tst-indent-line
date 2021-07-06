@@ -180,9 +180,9 @@ function reserveToUpdateActiveTreeStyle(windowId) {
     reserveToUpdateActiveTreeStyle.timers.delete(windowId);
 
     const [activeTab] = await browser.tabs.query({ active: true, windowId });
-    const activeTreeItem = await browser.runtime.sendMessage(TST_ID, {
+    const [activeTreeItem, parentTreeItem] = await browser.runtime.sendMessage(TST_ID, {
       type: 'get-tree',
-      tab:  activeTab.id,
+      tabs: [activeTab.id, `parent-of-${activeTab.id}`],
     });
 
     const highlightUpperLevel = (activeTreeItem.children.length == 0) || activeTreeItem.states.includes('subtree-collapsed');
@@ -191,11 +191,7 @@ function reserveToUpdateActiveTreeStyle(windowId) {
 
     let tabIds = [];
     if (highlightUpperLevel) {
-      if (activeTreeItem.ancestorTabIds.length > 0) {
-        const parentTreeItem = await browser.runtime.sendMessage(TST_ID, {
-          type: 'get-tree',
-          tab:  activeTreeItem.ancestorTabIds[0],
-        });
+      if (parentTreeItem) {
         tabIds = collectTabIds(parentTreeItem.children);
       }
     }
