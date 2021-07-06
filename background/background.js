@@ -247,8 +247,6 @@ function insertLine(tabId) {
     type:      'set-extra-tab-contents',
     id:        tabId,
     place:     'indent',
-    contents: [
-      '<span id="indent-line" part="indent-line"></span>'
-    ].join('')
+    contents: '<span id="indent-line" part="indent-line"></span>',
   });
 }
