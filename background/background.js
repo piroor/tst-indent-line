@@ -17,9 +17,7 @@ const BASE_STYLE = `
   }
 
   tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    background-image: var(--indent-line-highlighted);
     bottom: 0;
-    opacity: var(--indent-line-opacity);
     pointer-events: none;
     position: absolute;
     top: 0;
@@ -68,10 +66,24 @@ const BASE_STYLE = `
     --indent-line-highlighted: var(--indent-line-highlighted-right);
     right: calc(var(--indent-size) * 0.75);
   }
+`;
+
+const AUTO_STYLE = `${BASE_STYLE}
+  tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+    background-image: var(--indent-line-highlighted);
+    opacity: var(--indent-line-opacity);
+  }
 
   :root:hover tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
     background-image: var(--indent-line-highlighted), var(--indent-line);
     --indent-line-opacity: 1;
+  }
+`;
+
+const ALWAYS_SHOW_STYLE = `${BASE_STYLE}
+  tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+    background-image: var(--indent-line-highlighted), var(--indent-line);
+    opacity: 1;
   }
 `;
 
@@ -98,18 +110,13 @@ async function registerToTST() {
 }
 configs.$loaded.then(registerToTST);
 
-/*
 configs.$addObserver(key => {
   switch (key) {
-    case '???':
-      registerToTST();
-      return;
-    case '???':
-      tryReset();
+    case 'autoShow':
+      applyStyles();
       return;
   }
 });
-*/
 
 browser.runtime.onMessageExternal.addListener((message, sender) => {
   switch (sender.id) {
@@ -223,7 +230,10 @@ function collectTabIds(treeItems, tabIds = []) {
 function applyStyles() {
   browser.runtime.sendMessage(TST_ID, {
     type: 'register-self' ,
-    style: `${BASE_STYLE}\n${Array.from(stylesForWindow.values()).join('\n')}`,
+    style: `
+      ${configs.autoShow ? AUTO_STYLE : ALWAYS_SHOW_STYLE}
+      ${Array.from(stylesForWindow.values()).join('\n')}
+    `,
   });
 }
 

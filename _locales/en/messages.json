@@ -1,4 +1,8 @@
 {
   "extensionName": { "message": "TST Indent Line" },
-  "extensionDescription": { "message": "Provides indent line for Tree Style Tab sidebar." }
+  "extensionDescription": { "message": "Provides indent line for Tree Style Tab sidebar." },
+
+  "config_autoShow_caption": { "message": "Visibility of lines" },
+  "config_autoShow_true":    { "message": "Show only when Hovered" },
+  "config_autoShow_false":   { "message": "Show Always" }
 }

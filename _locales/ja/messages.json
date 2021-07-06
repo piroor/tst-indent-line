@@ -1,4 +1,8 @@
 {
   "extensionName": { "message": "TST Indent Line" },
-  "extensionDescription": { "message": "Tree Style Tabのサイドバーに、インデントの状態を示す線を表示します。" }
+  "extensionDescription": { "message": "Tree Style Tabのサイドバーに、インデントの状態を示す線を表示します。" },
+
+  "config_autoShow_caption": { "message": "線の表示" },
+  "config_autoShow_true":    { "message": "ホバー時のみ表示" },
+  "config_autoShow_false":   { "message": "常に表示" }
 }
