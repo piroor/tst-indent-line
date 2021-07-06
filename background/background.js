@@ -244,9 +244,9 @@ tryReset.reserved = null;
 
 function insertLine(tabId) {
   browser.runtime.sendMessage(TST_ID, {
-    type:      'set-extra-tab-contents',
-    id:        tabId,
-    place:     'indent',
+    type:     'set-extra-tab-contents',
+    id:       tabId,
+    place:    'indent',
     contents: '<span id="indent-line" part="indent-line"></span>',
   });
 }
