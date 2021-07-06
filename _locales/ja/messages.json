@@ -1,0 +1,4 @@
+{
+  "extensionName": { "message": "TST Indent Line" },
+  "extensionDescription": { "message": "Tree Style Tabのサイドバーに、インデントの状態を示す線を表示します。" },
+}
