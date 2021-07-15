@@ -308,6 +308,9 @@ function reserveToUpdateActiveTreeStyle(windowId) {
     reserveToUpdateActiveTreeStyle.timers.delete(windowId);
 
     const [activeTab] = await browser.tabs.query({ active: true, windowId });
+    if (!activeTab)
+      return;
+
     const [activeTreeItem, parentTreeItem] = await browser.runtime.sendMessage(TST_ID, {
       type: 'get-tree',
       tabs: [activeTab.id, `parent-of-${activeTab.id}`],
