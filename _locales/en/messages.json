@@ -4,5 +4,7 @@
 
   "config_autoShow_caption": { "message": "Visibility of lines" },
   "config_autoShow_true":    { "message": "Show only when Hovered" },
-  "config_autoShow_false":   { "message": "Show Always" }
+  "config_autoShow_false":   { "message": "Show Always" },
+
+  "config_debug_label": { "message": "Debug mode" }
 }

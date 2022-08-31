@@ -6,7 +6,8 @@
 'use strict';
 
 import {
-  configs
+  configs,
+  log,
 } from '/common/common.js';
 
 const TST_ID = 'treestyletab@piro.sakura.ne.jp';
@@ -336,6 +337,7 @@ function reserveToUpdateActiveTreeStyle(windowId) {
         --indent-line-opacity: 1;
       }
     ` : '');
+    log(`style for window ${windowId}: ${stylesForWindow.get(windowId)}`);
 
     applyStyles();
   }, 100));
