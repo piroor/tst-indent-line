@@ -307,15 +307,34 @@ function reserveToUpdateActiveTreeStyle(windowId) {
     clearTimeout(timer);
   reserveToUpdateActiveTreeStyle.timers.set(windowId, setTimeout(async () => {
     reserveToUpdateActiveTreeStyle.timers.delete(windowId);
+    log(`trying to update window ${windowId}`);
+
+    try {
+      const targetWindow = await browser.windows.get(windowId);
+      if (!targetWindow) {
+        log(`window ${windowId} is already closed (null instance)`);
+        return;
+      }
+    }
+    catch(_error) {
+      log(`window ${windowId} is already closed (failed to get instance)`);
+      return;
+    }
 
     const [activeTab] = await browser.tabs.query({ active: true, windowId });
-    if (!activeTab)
-      return;
+    if (!activeTab) {
+      log(`no active tab in ${windowId}: retry`);
+      return reserveToUpdateActiveTreeStyle(windowId);
+    }
 
     const [activeTreeItem, parentTreeItem] = await browser.runtime.sendMessage(TST_ID, {
       type: 'get-tree',
       tabs: [activeTab.id, `parent-of-${activeTab.id}`],
     });
+    if (!activeTreeItem) {
+      log(`no active tree item in ${windowId}: retry`);
+      return reserveToUpdateActiveTreeStyle(windowId);
+    }
 
     const highlightUpperLevel = (activeTreeItem.children.length == 0) || activeTreeItem.states.includes('subtree-collapsed');
     const highlightLevelOffset = highlightUpperLevel ? -1 : 0;
