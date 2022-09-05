@@ -169,6 +169,18 @@ const BASE_STYLE = `
     right: calc(var(--indent-size) * 0.75);
   }
 
+  #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+    width: calc(var(--tab-indent) + var(--scrollbar-placeholder-size));
+  }
+
+  :root.left #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+    left: calc((var(--indent-size) * 0.75) + var(--scrollbar-placeholder-size) - 1px);
+  }
+
+  :root.right #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+    right: calc((var(--indent-size) * 0.75) + var(--scrollbar-placeholder-size) - 1px);
+  }
+
   /*
   tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% connector-line) {
     border-top: 1px solid var(--tab-border);
