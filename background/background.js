@@ -174,11 +174,11 @@ const BASE_STYLE = `
   }
 
   :root.left #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    left: calc((var(--indent-size) * 0.75) + var(--scrollbar-placeholder-size) - 1px);
+    left: calc((var(--indent-size) * 0.75) + var(--scrollbar-placeholder-size));
   }
 
   :root.right #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    right: calc((var(--indent-size) * 0.75) + var(--scrollbar-placeholder-size) - 1px);
+    right: calc((var(--indent-size) * 0.75) + var(--scrollbar-placeholder-size));
   }
 
   /*
