@@ -411,9 +411,9 @@ tryReset.reserved = null;
 
 function insertLine(tabId) {
   browser.runtime.sendMessage(TST_ID, {
-    type:     'set-extra-tab-contents',
-    id:       tabId,
-    place:    'indent',
+    type:     'set-extra-contents',
+    tabId,
+    place:    'tab-indent',
     contents: [
       '<span id="indent-line" part="indent-line"></span>',
       '<span id="connector-line" part="connector-line"></span>',
