@@ -222,6 +222,7 @@ const ALWAYS_SHOW_STYLE = `${BASE_STYLE}
 `;
 
 const stylesForWindow = new Map();
+const tabsHavingIndentLineForWindow = new Map();
 
 async function registerToTST() {
   try {
@@ -235,6 +236,9 @@ async function registerToTST() {
         'tree-detached',
         'tree-collapsed-state-changed',
       ],
+    });
+    await browser.runtime.sendMessage(TST_ID, {
+      type: 'clear-all-extra-contents',
     });
     tryReset();
   }
@@ -261,17 +265,22 @@ browser.runtime.onMessageExternal.addListener((message, sender) => {
           break;
 
         case 'sidebar-show':
-          browser.tabs.query({ windowId: message.windowId }).then(tabs => {
-            for (const tab of tabs) {
-              insertLine(tab.id);
-            }
+          insertLineToWindow(message.windowId).then(() => {
             reserveToUpdateActiveTreeStyle(message.windowId);
           });
           break;
 
         case 'tree-attached':
+          insertLineToTreeItem(message.parent, { recursive: true });
+          reserveToUpdateActiveTreeStyle(message.tab.windowId);
+          break;
+
         case 'tree-detached':
+          reserveToUpdateActiveTreeStyle(message.tab.windowId);
+          break;
+
         case 'tree-collapsed-state-changed':
+          insertLineToTreeItem(message.tab, { recursive: true });
           reserveToUpdateActiveTreeStyle(message.tab.windowId);
           break;
       }
@@ -280,15 +289,25 @@ browser.runtime.onMessageExternal.addListener((message, sender) => {
 });
 
 browser.tabs.onCreated.addListener(tab => {
-  insertLine(tab.id);
-  reserveToUpdateActiveTreeStyle(tab.windowId);
+  browser.runtime.sendMessage(TST_ID, {
+    type:     'get-tree' ,
+    tab:      tab.id,
+    windowId: tab.windowId,
+  }).then(treeItem => {
+    if (!treeItem)
+      return;
+    insertLineToTreeItem(treeItem, { force: true });
+  });
 });
 
 browser.tabs.onActivated.addListener(activeInfo => {
   reserveToUpdateActiveTreeStyle(activeInfo.windowId);
 });
 
-browser.tabs.onRemoved.addListener((_tabId, removeInfo) => {
+browser.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  const ids = tabsHavingIndentLineForWindow.get(removeInfo.windowId);
+  if (ids)
+    ids.delete(tabId);
   reserveToUpdateActiveTreeStyle(removeInfo.windowId);
 });
 
@@ -296,11 +315,17 @@ browser.tabs.onMoved.addListener((_tabId, moveInfo) => {
   reserveToUpdateActiveTreeStyle(moveInfo.windowId);
 });
 
-browser.tabs.onAttached.addListener((_tabId, attachInfo) => {
+browser.tabs.onAttached.addListener((tabId, attachInfo) => {
+  const ids = tabsHavingIndentLineForWindow.get(attachInfo.newWindowId);
+  if (ids)
+    ids.delete(tabId);
   reserveToUpdateActiveTreeStyle(attachInfo.newWindowId);
 });
 
-browser.tabs.onDetached.addListener((_tabId, detachInfo) => {
+browser.tabs.onDetached.addListener((tabId, detachInfo) => {
+  const ids = tabsHavingIndentLineForWindow.get(detachInfo.oldWindowId);
+  if (ids)
+    ids.delete(tabId);
   reserveToUpdateActiveTreeStyle(detachInfo.oldWindowId);
 });
 
@@ -310,6 +335,7 @@ browser.tabs.onUpdated.addListener((_tabId, _changeInfo, tab) => {
 
 browser.windows.onRemoved.addListener(windowId => {
   stylesForWindow.delete(windowId);
+  tabsHavingIndentLineForWindow.delete(windowId);
   applyStyles();
 });
 
@@ -399,17 +425,56 @@ function tryReset() {
     clearTimeout(tryReset.reserved);
   tryReset.reserved = setTimeout(() => {
     tryReset.reserved = null;
-    browser.tabs.query({}).then(tabs => {
-      for (const tab of tabs) {
-        insertLine(tab.id);
-        reserveToUpdateActiveTreeStyle(tab.windowId);
+    browser.windows.getAll({ populate: true }).then(async windows => {
+      for (const window of windows) {
+        insertLineToWindow(window.id, window.tabs);
       }
     });
   }, 100);
 }
 tryReset.reserved = null;
 
-function insertLine(tabId) {
+async function insertLineToWindow(windowId, tabs = null) {
+  if (!tabs)
+    tabs = await browser.tabs.query({ windowId });
+  const treeItems = await browser.runtime.sendMessage(TST_ID, {
+    type:     'get-tree' ,
+    tabs:     tabs.map(tab => tab.id),
+    windowId: window.id,
+  });
+  if (!treeItems)
+    return;
+  for (const treeItem of treeItems) {
+    insertLineToTreeItem(treeItem);
+  }
+}
+
+function insertLineToTreeItem(treeItem, { force, recursive } = {}) {
+  if (recursive && treeItem.children) {
+    for (const child of treeItem.children) {
+      insertLineToTreeItem(child, { recursive })
+    }
+  }
+
+  const ids = tabsHavingIndentLineForWindow.get(treeItem.windowId);
+  if ((ids && ids.has(treeItem.id)) ||
+      (!force &&
+       (treeItem.ancestorTabIds.length == 0 ||
+        treeItem.states.includes('collapsed'))))
+    return;
+
+  insertLineToTab(treeItem.id);
+
+  if (ids)
+    ids.add(treeItem.id);
+  else
+    tabsHavingIndentLineForWindow.set(treeItem.windowId, new Set([treeItem.id]));
+
+  reserveToUpdateActiveTreeStyle(treeItem.windowId);
+}
+
+function insertLineToTab(tabId) {
+  log(`insertLineToTab ${tabId}`);
   browser.runtime.sendMessage(TST_ID, {
     type:     'set-extra-contents',
     tabId,
