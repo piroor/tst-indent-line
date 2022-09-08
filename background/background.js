@@ -240,6 +240,7 @@ async function registerToTST() {
     await browser.runtime.sendMessage(TST_ID, {
       type: 'clear-all-extra-contents',
     });
+    tabsHavingIndentLineForWindow.clear();
     tryReset();
   }
   catch(_error) {
@@ -265,6 +266,7 @@ browser.runtime.onMessageExternal.addListener((message, sender) => {
           break;
 
         case 'sidebar-show':
+          tabsHavingIndentLineForWindow.delete(message.windowId);
           insertLineToWindow(message.windowId).then(() => {
             reserveToUpdateActiveTreeStyle(message.windowId);
           });
