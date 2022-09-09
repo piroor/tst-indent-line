@@ -228,18 +228,18 @@ async function registerToTST() {
   try {
     await Promise.all([
       browser.runtime.sendMessage(TST_ID, {
-      type: 'register-self' ,
-      name: browser.i18n.getMessage('extensionName'),
-      //icons: browser.runtime.getManifest().icons,
-      listeningTypes: [
-        'sidebar-show',
-        'tree-attached',
-        'tree-detached',
-        'tree-collapsed-state-changed',
-      ],
+        type: 'register-self' ,
+        name: browser.i18n.getMessage('extensionName'),
+        //icons: browser.runtime.getManifest().icons,
+        listeningTypes: [
+          'sidebar-show',
+          'tree-attached',
+          'tree-detached',
+          'tree-collapsed-state-changed',
+        ],
       }),
       browser.runtime.sendMessage(TST_ID, {
-      type: 'clear-all-extra-contents',
+        type: 'clear-all-extra-contents',
       }),
     ]);
     tabsHavingIndentLineForWindow.clear();
