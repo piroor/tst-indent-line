@@ -226,7 +226,8 @@ const tabsHavingIndentLineForWindow = new Map();
 
 async function registerToTST() {
   try {
-    await browser.runtime.sendMessage(TST_ID, {
+    await Promise.all([
+      browser.runtime.sendMessage(TST_ID, {
       type: 'register-self' ,
       name: browser.i18n.getMessage('extensionName'),
       //icons: browser.runtime.getManifest().icons,
@@ -236,10 +237,11 @@ async function registerToTST() {
         'tree-detached',
         'tree-collapsed-state-changed',
       ],
-    });
-    await browser.runtime.sendMessage(TST_ID, {
+      }),
+      browser.runtime.sendMessage(TST_ID, {
       type: 'clear-all-extra-contents',
-    });
+      }),
+    ]);
     tabsHavingIndentLineForWindow.clear();
     tryReset();
   }
