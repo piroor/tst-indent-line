@@ -170,15 +170,15 @@ const BASE_STYLE = `
   }
 
   #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    width: calc(var(--tab-indent) + var(--scrollbar-placeholder-size));
+    width: calc(var(--tab-indent) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
   :root.left #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    left: calc((var(--indent-size) * 0.75) + var(--scrollbar-placeholder-size));
+    left: calc((var(--indent-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
   :root.right #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    right: calc((var(--indent-size) * 0.75) + var(--scrollbar-placeholder-size));
+    right: calc((var(--indent-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
   /*
