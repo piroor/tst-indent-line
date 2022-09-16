@@ -1,6 +1,8 @@
 # History
 
  - master/HEAD
+ - 1.2.1 (2022.9.16)
+   * Follow to changes on TST 3.9.2.
  - 1.2 (2022.9.13)
    * Follow to changes on TST 3.9.0.
    * Optimize performance. Extra contents in tabs won't be inserted until they become really necessary.
