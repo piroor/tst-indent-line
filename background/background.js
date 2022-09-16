@@ -169,15 +169,31 @@ const BASE_STYLE = `
     right: calc(var(--indent-size) * 0.75);
   }
 
-  #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+
+  :root.shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
+    tab-item:not(.pinned):not(.collapsed)
+    ::part(%EXTRA_CONTENTS_PART% indent-line),
+  :root:not(.shift-tabs-for-scrollbar-only-on-hover)
+    #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned)
+    ::part(%EXTRA_CONTENTS_PART% indent-line) {
     width: calc(var(--tab-indent) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
-  :root.left #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+  :root.left.shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
+    tab-item:not(.pinned):not(.collapsed)
+    ::part(%EXTRA_CONTENTS_PART% indent-line),
+  :root.left:not(.shift-tabs-for-scrollbar-only-on-hover)
+    #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned)
+    ::part(%EXTRA_CONTENTS_PART% indent-line) {
     left: calc((var(--indent-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
-  :root.right #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+  :root.right.shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
+    tab-item:not(.pinned):not(.collapsed)
+    ::part(%EXTRA_CONTENTS_PART% indent-line),
+  :root.right:not(.shift-tabs-for-scrollbar-only-on-hover)
+    #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned)
+    ::part(%EXTRA_CONTENTS_PART% indent-line) {
     right: calc((var(--indent-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
