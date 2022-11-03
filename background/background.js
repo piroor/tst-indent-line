@@ -17,7 +17,11 @@ const BASE_STYLE = `
     --indent-line-opacity: 0;
   }
 
-  tab-item { --indent-level: 0; }
+  tab-item {
+    --indent-level: 0;
+    --indent-line-color: var(--tab-border);
+    --indent-line-color-active: currentcolor;
+  }
   tab-item[data-level="1"] { --indent-level: 1; }
   tab-item[data-level="2"] { --indent-level: 2; }
   tab-item[data-level="3"] { --indent-level: 3; }
@@ -127,33 +131,33 @@ const BASE_STYLE = `
     width: var(--tab-indent);
     --indent-line-left: repeating-linear-gradient(
       to right,
-      rgba(0, 0, 0, 0) 0px,
-      var(--tab-border) 0px,
-      var(--tab-border) 1px,
-      rgba(0, 0, 0, 0) 1px,
-      rgba(0, 0, 0, 0) var(--indent-size)
+      transparent 0px,
+      var(--indent-line-color) 0px,
+      var(--indent-line-color) 1px,
+      transparent 1px,
+      transparent var(--indent-size)
     );
     --indent-line-right: repeating-linear-gradient(
       to left,
-      rgba(0, 0, 0, 0) 0px,
-      var(--tab-border) 0px,
-      var(--tab-border) 1px,
-      rgba(0, 0, 0, 0) 1px,
-      rgba(0, 0, 0, 0) var(--indent-size)
+      transparent 0px,
+      var(--indent-line-color) 0px,
+      var(--indent-line-color) 1px,
+      transparent 1px,
+      transparent var(--indent-size)
     );
     --indent-line-highlighted-left: linear-gradient(
       to right,
-      rgba(0, 0, 0, 0) calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      currentcolor calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      currentcolor calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px),
-      rgba(0, 0, 0, 0) calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px)
+      transparent calc(var(--indent-size) * (var(--highlighted-indent-level))),
+      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level))),
+      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px),
+      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px)
     );
     --indent-line-highlighted-right: linear-gradient(
       to left,
-      rgba(0, 0, 0, 0) calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      currentcolor calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      currentcolor calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px),
-      rgba(0, 0, 0, 0) calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px)
+      transparent calc(var(--indent-size) * (var(--highlighted-indent-level))),
+      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level))),
+      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px),
+      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px)
     );
   }
 
@@ -199,7 +203,7 @@ const BASE_STYLE = `
 
   /*
   tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% connector-line) {
-    border-top: 1px solid var(--tab-border);
+    border-top: 1px solid var(--indent-line-color);
     height: 1px;
     pointer-events: none;
     position: absolute;
