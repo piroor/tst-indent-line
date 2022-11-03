@@ -45,3 +45,8 @@ ul p.sub {
   margin-top: 0;
   margin-bottom: 0;
 }
+
+.selectable {
+  -moz-user-select: text;
+  cursor: text;
+}

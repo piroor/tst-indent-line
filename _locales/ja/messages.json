@@ -5,6 +5,9 @@
   "config_autoShow_caption": { "message": "線の表示" },
   "config_autoShow_true":    { "message": "ホバー時のみ表示" },
   "config_autoShow_false":   { "message": "常に表示" },
+  "config_colorCustomization_description_before": { "message": "線の色は " },
+  "config_colorCustomization_description_link": { "message": "Tree Style Tabの設定→詳細設定→ツリー型タブが提供するページ用の追加のスタイル指定" },
+  "config_colorCustomization_description_after": { "message": " で変更できます。例：" },
 
   "config_debug_label": { "message": "デバッグモード" }
 }

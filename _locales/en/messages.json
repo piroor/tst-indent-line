@@ -5,6 +5,10 @@
   "config_autoShow_caption": { "message": "Visibility of lines" },
   "config_autoShow_true":    { "message": "Show only when Hovered" },
   "config_autoShow_false":   { "message": "Show Always" },
+  "config_colorCustomization_description_before": { "message": "Line colors can be customized via " },
+  "config_colorCustomization_description_link": { "message": "Tree Style Tab options => Advanced => Extra style rules for contents provided by Tree Style Tab" },
+  "config_colorCustomization_description_href": { "message": "ext+treestyletab:options#userStyleRulesField" },
+  "config_colorCustomization_description_after": { "message": ", for example:" },
 
   "config_debug_label": { "message": "Debug mode" }
 }
