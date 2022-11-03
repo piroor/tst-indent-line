@@ -1,6 +1,9 @@
 # History
 
  - master/HEAD
+ - 1.2.2 (2022.11.3)
+   * Define CSS variables `--indent-line-color` and `--indent-line-color-active` for easy customization.
+   * Add description how to customize line color in the options page.
  - 1.2.1 (2022.9.16)
    * Follow to changes on TST 3.9.2.
  - 1.2 (2022.9.13)
