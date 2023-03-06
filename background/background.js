@@ -122,14 +122,17 @@ const BASE_STYLE = `
   tab-item[data-level="98"] { --indent-level: 98; }
   tab-item[data-level="99"] { --indent-level: 99; }
 
+  :root.animation tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+    transition: opacity var(--collapse-animation),
+                left var(--indent-animation),
+                right var(--indent-animation);
+  }
+
   tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
     bottom: 0;
     pointer-events: none;
     position: absolute;
     top: 0;
-    transition: opacity var(--collapse-animation),
-                left var(--indent-animation),
-                right var(--indent-animation);
     width: var(--tab-indent);
     --indent-line-left: repeating-linear-gradient(
       to right,
