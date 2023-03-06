@@ -127,7 +127,9 @@ const BASE_STYLE = `
     pointer-events: none;
     position: absolute;
     top: 0;
-    transition: opacity var(--collapse-animation);
+    transition: opacity var(--collapse-animation),
+                left var(--indent-animation),
+                right var(--indent-animation);
     width: var(--tab-indent);
     --indent-line-left: repeating-linear-gradient(
       to right,
