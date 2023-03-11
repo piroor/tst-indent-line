@@ -1,6 +1,8 @@
 # History
 
  - master/HEAD
+ - 1.2.3 (2023.3.12)
+   * Apply animation effect for updated indentation.
  - 1.2.2 (2022.11.3)
    * Define CSS variables `--indent-line-color` and `--indent-line-color-active` for easy customization.
    * Add description how to customize line color in the options page.
