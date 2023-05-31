@@ -16,6 +16,7 @@ const BASE_STYLE = `
     --highlighted-indent-level: -1;
     --indent-line-opacity: 0;
     --indent-line-width: 1px;
+    --indent-line-width-active: 1px;
   }
 
   tab-item {
@@ -155,15 +156,15 @@ const BASE_STYLE = `
       to right,
       transparent calc(var(--indent-size) * (var(--highlighted-indent-level))),
       var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width)),
-      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width))
+      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active)),
+      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active))
     );
     --indent-line-highlighted-right: linear-gradient(
       to left,
       transparent calc(var(--indent-size) * (var(--highlighted-indent-level))),
       var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width)),
-      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width))
+      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active)),
+      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active))
     );
   }
 
