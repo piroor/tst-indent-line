@@ -15,6 +15,7 @@ const BASE_STYLE = `
   :root {
     --highlighted-indent-level: -1;
     --indent-line-opacity: 0;
+    --indent-line-width: 1px;
   }
 
   tab-item {
@@ -138,31 +139,31 @@ const BASE_STYLE = `
       to right,
       transparent 0px,
       var(--indent-line-color) 0px,
-      var(--indent-line-color) 1px,
-      transparent 1px,
+      var(--indent-line-color) var(--indent-line-width),
+      transparent var(--indent-line-width),
       transparent var(--indent-size)
     );
     --indent-line-right: repeating-linear-gradient(
       to left,
       transparent 0px,
       var(--indent-line-color) 0px,
-      var(--indent-line-color) 1px,
-      transparent 1px,
+      var(--indent-line-color) var(--indent-line-width),
+      transparent var(--indent-line-width),
       transparent var(--indent-size)
     );
     --indent-line-highlighted-left: linear-gradient(
       to right,
       transparent calc(var(--indent-size) * (var(--highlighted-indent-level))),
       var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px),
-      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px)
+      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width)),
+      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width))
     );
     --indent-line-highlighted-right: linear-gradient(
       to left,
       transparent calc(var(--indent-size) * (var(--highlighted-indent-level))),
       var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px),
-      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + 1px)
+      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width)),
+      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width))
     );
   }
 
@@ -208,8 +209,8 @@ const BASE_STYLE = `
 
   /*
   tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% connector-line) {
-    border-top: 1px solid var(--indent-line-color);
-    height: 1px;
+    border-top: var(--indent-line-width) solid var(--indent-line-color);
+    height: var(--indent-line-width);
     pointer-events: none;
     position: absolute;
     top: 50%;
