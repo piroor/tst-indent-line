@@ -1,6 +1,8 @@
 # History
 
  - master/HEAD
+ - 1.2.4 (2023.9.9)
+   * Make indent line width customizable more easily via custom properties `--indent-line-width` (for inactive tree) and `--indent-line-width-active` (for active tree).
  - 1.2.3 (2023.3.12)
    * Apply animation effect for updated indentation.
  - 1.2.2 (2022.11.3)
