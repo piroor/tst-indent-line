@@ -260,6 +260,7 @@ async function registerToTST() {
         //icons: browser.runtime.getManifest().icons,
         listeningTypes: [
           'sidebar-show',
+          'tab-rendered',
           'tree-attached',
           'tree-detached',
           'tree-collapsed-state-changed',
@@ -301,6 +302,10 @@ browser.runtime.onMessageExternal.addListener((message, sender) => {
           });
           break;
 
+        case 'tab-rendered':
+          insertLineToTreeItem(message.tab, { rendered: true });
+          break;
+
         case 'tree-attached':
           insertLineToTreeItem(message.parent, { recursive: true });
           reserveToUpdateActiveTreeStyle(message.tab.windowId);
@@ -327,7 +332,7 @@ browser.tabs.onCreated.addListener(tab => {
   }).then(treeItem => {
     if (!treeItem)
       return;
-    insertLineToTreeItem(treeItem, { force: true });
+    insertLineToTreeItem(treeItem, { created: true });
   });
 });
 
@@ -480,7 +485,7 @@ async function insertLineToWindow(windowId, tabs = null) {
   }
 }
 
-function insertLineToTreeItem(treeItem, { force, recursive } = {}) {
+function insertLineToTreeItem(treeItem, { created, rendered, recursive } = {}) {
   if (recursive && treeItem.children) {
     for (const child of treeItem.children) {
       insertLineToTreeItem(child, { recursive })
@@ -488,10 +493,12 @@ function insertLineToTreeItem(treeItem, { force, recursive } = {}) {
   }
 
   const ids = tabsHavingIndentLineForWindow.get(treeItem.windowId);
-  if ((ids && ids.has(treeItem.id)) ||
-      (!force &&
+  if (!rendered && (
+      (ids && ids.has(treeItem.id)) ||
+      (!created &&
        (treeItem.ancestorTabIds.length == 0 ||
-        treeItem.states.includes('collapsed'))))
+        treeItem.states.includes('collapsed')))
+      ))
     return;
 
   insertLineToTab(treeItem.id);
