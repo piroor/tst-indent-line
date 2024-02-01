@@ -260,7 +260,7 @@ async function registerToTST() {
         //icons: browser.runtime.getManifest().icons,
         listeningTypes: [
           'sidebar-show',
-          'tab-rendered',
+          'tabs-rendered',
           'tree-attached',
           'tree-detached',
           'tree-collapsed-state-changed',
@@ -302,8 +302,10 @@ browser.runtime.onMessageExternal.addListener((message, sender) => {
           });
           break;
 
-        case 'tab-rendered':
-          insertLineToTreeItem(message.tab, { rendered: true });
+        case 'tabs-rendered':
+          for (const tab of message.tabs) {
+            insertLineToTreeItem(tab, { rendered: true });
+          }
           break;
 
         case 'tree-attached':
