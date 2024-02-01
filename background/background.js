@@ -8,6 +8,7 @@
 import {
   configs,
   log,
+  nextFrame,
 } from '/common/common.js';
 
 const TST_ID = 'treestyletab@piro.sakura.ne.jp';
@@ -512,9 +513,11 @@ function insertLineToTreeItem(treeItem, { created, rendered, recursive } = {}) {
   reserveToUpdateActiveTreeStyle(treeItem.windowId);
 }
 
+const mPendingInsertLineMessages = new Map();
+
 function insertLineToTab(tabId) {
   log(`insertLineToTab ${tabId}`);
-  browser.runtime.sendMessage(TST_ID, {
+  mPendingInsertLineMessages.set(tabId, {
     type:     'set-extra-contents',
     tabId,
     place:    'tab-indent',
@@ -522,5 +525,15 @@ function insertLineToTab(tabId) {
       '<span id="indent-line" part="indent-line"></span>',
       '<span id="connector-line" part="connector-line"></span>',
     ].join(''),
+  });
+
+  const startAt = `${Date.now()}-${parseInt(Math.random() * 65000)}`;
+  insertLineToTab.lastStartedAt = startAt;
+  nextFrame().then(() => {
+    if (insertLineToTab.lastStartedAt != startAt)
+      return;
+    const messages = [...mPendingInsertLineMessages.values()];
+    mPendingInsertLineMessages.clear();
+    browser.runtime.sendMessage(TST_ID, { messages });
   });
 }
