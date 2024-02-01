@@ -493,12 +493,11 @@ function insertLineToTreeItem(treeItem, { created, rendered, recursive } = {}) {
   }
 
   const ids = tabsHavingIndentLineForWindow.get(treeItem.windowId);
-  if (!rendered && (
-      (ids && ids.has(treeItem.id)) ||
-      (!created &&
-       (treeItem.ancestorTabIds.length == 0 ||
-        treeItem.states.includes('collapsed')))
-      ))
+  if (!rendered &&
+      ((ids && ids.has(treeItem.id)) ||
+       (!created &&
+        (treeItem.ancestorTabIds.length == 0 ||
+         treeItem.states.includes('collapsed')))))
     return;
 
   insertLineToTab(treeItem.id);
