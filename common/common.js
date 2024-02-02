@@ -33,9 +33,3 @@ export async function log(message, ...args)
   const line = `tst-indent-line: ${indent}${message}`;
   console.log(line, ...args);
 }
-
-export function nextFrame() {
-  return new Promise((resolve, _reject) => {
-    window.requestAnimationFrame(resolve);
-  });
-}

@@ -8,7 +8,6 @@
 import {
   configs,
   log,
-  nextFrame,
 } from '/common/common.js';
 
 const TST_ID = 'treestyletab@piro.sakura.ne.jp';
@@ -540,7 +539,7 @@ function insertLineToTab(tabId) {
 
   const startAt = `${Date.now()}-${parseInt(Math.random() * 65000)}`;
   insertLineToTab.lastStartedAt = startAt;
-  nextFrame().then(() => {
+  window.requestAnimationFrame(() => {
     if (insertLineToTab.lastStartedAt != startAt)
       return;
     const messages = [...mPendingInsertLineMessages.values()];
