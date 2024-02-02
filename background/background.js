@@ -253,6 +253,7 @@ const stylesForWindow = new Map();
 const tabsHavingIndentLineForWindow = new Map();
 
 let mCanSendBulkMessages = false;
+let mRenderedOnDemand    = false;
 
 async function registerToTST() {
   try {
@@ -277,7 +278,7 @@ async function registerToTST() {
     tabsHavingIndentLineForWindow.clear();
     tryReset();
     if (TSTVersion && parseInt(TSTVersion.split('.')[0]) >= 4)
-      mCanSendBulkMessages = true;
+      mCanSendBulkMessages = mRenderedOnDemand = true;
   }
   catch(_error) {
     // TST is not available
@@ -333,6 +334,8 @@ browser.runtime.onMessageExternal.addListener((message, sender) => {
 });
 
 browser.tabs.onCreated.addListener(tab => {
+  if (mRenderedOnDemand)
+    return;
   browser.runtime.sendMessage(TST_ID, {
     type:     'get-tree' ,
     tab:      tab.id,
@@ -482,13 +485,16 @@ async function insertLineToWindow(windowId, tabs = null) {
   if (!tabs)
     tabs = await browser.tabs.query({ windowId });
   const treeItems = await browser.runtime.sendMessage(TST_ID, {
-    type:     'get-tree' ,
+    type:     'get-tree',
     tabs:     tabs.map(tab => tab.id),
     windowId: window.id,
+    rendered: true,
   });
   if (!treeItems)
     return;
   for (const treeItem of treeItems) {
+    if (!treeItem)
+      continue;
     insertLineToTreeItem(treeItem);
   }
 }
