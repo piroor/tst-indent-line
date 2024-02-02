@@ -1,6 +1,9 @@
 # History
 
  - master/HEAD
+ - 1.3 (2024.2.2)
+   * Optimize with reduced API call.
+   * Prepare to support next version TST.
  - 1.2.4 (2023.9.9)
    * Make indent line width customizable more easily via custom properties `--indent-line-width` (for inactive tree) and `--indent-line-width-active` (for active tree).
  - 1.2.3 (2023.3.12)
