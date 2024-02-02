@@ -252,9 +252,12 @@ const ALWAYS_SHOW_STYLE = `${BASE_STYLE}
 const stylesForWindow = new Map();
 const tabsHavingIndentLineForWindow = new Map();
 
+let mCanSendBulkMessages = false;
+
 async function registerToTST() {
   try {
-    await Promise.all([
+    const [TSTVersion] = await Promise.all([
+      browser.runtime.sendMessage(TST_ID, { type: 'vet-version' }),
       browser.runtime.sendMessage(TST_ID, {
         type: 'register-self' ,
         name: browser.i18n.getMessage('extensionName'),
@@ -273,6 +276,8 @@ async function registerToTST() {
     ]);
     tabsHavingIndentLineForWindow.clear();
     tryReset();
+    if (TSTVersion && parseInt(TSTVersion.split('.')[0]) >= 4)
+      mCanSendBulkMessages = true;
   }
   catch(_error) {
     // TST is not available
@@ -534,6 +539,13 @@ function insertLineToTab(tabId) {
       return;
     const messages = [...mPendingInsertLineMessages.values()];
     mPendingInsertLineMessages.clear();
-    browser.runtime.sendMessage(TST_ID, { messages });
+    if (mCanSendBulkMessages) {
+      browser.runtime.sendMessage(TST_ID, { messages });
+    }
+    else {
+      for (const message of messages) {
+        browser.runtime.sendMessage(TST_ID, message);
+      }
+    }
   });
 }
