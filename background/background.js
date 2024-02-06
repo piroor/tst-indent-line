@@ -367,9 +367,11 @@ browser.tabs.onActivated.addListener(activeInfo => {
 });
 
 browser.tabs.onRemoved.addListener((tabId, removeInfo) => {
-  const ids = tabsHavingIndentLineForWindow.get(removeInfo.windowId);
-  if (ids)
-    ids.delete(tabId);
+  if (!mRenderedOnDemand) {
+    const ids = tabsHavingIndentLineForWindow.get(removeInfo.windowId);
+    if (ids)
+      ids.delete(tabId);
+  }
   reserveToUpdateActiveTreeStyle(removeInfo.windowId);
 });
 
@@ -378,16 +380,20 @@ browser.tabs.onMoved.addListener((_tabId, moveInfo) => {
 });
 
 browser.tabs.onAttached.addListener((tabId, attachInfo) => {
-  const ids = tabsHavingIndentLineForWindow.get(attachInfo.newWindowId);
-  if (ids)
-    ids.delete(tabId);
+  if (!mRenderedOnDemand) {
+    const ids = tabsHavingIndentLineForWindow.get(attachInfo.newWindowId);
+    if (ids)
+      ids.delete(tabId);
+  }
   reserveToUpdateActiveTreeStyle(attachInfo.newWindowId);
 });
 
 browser.tabs.onDetached.addListener((tabId, detachInfo) => {
-  const ids = tabsHavingIndentLineForWindow.get(detachInfo.oldWindowId);
-  if (ids)
-    ids.delete(tabId);
+  if (!mRenderedOnDemand) {
+    const ids = tabsHavingIndentLineForWindow.get(detachInfo.oldWindowId);
+    if (ids)
+      ids.delete(tabId);
+  }
   reserveToUpdateActiveTreeStyle(detachInfo.oldWindowId);
 });
 
@@ -397,7 +403,8 @@ browser.tabs.onUpdated.addListener((_tabId, _changeInfo, tab) => {
 
 browser.windows.onRemoved.addListener(windowId => {
   stylesForWindow.delete(windowId);
-  tabsHavingIndentLineForWindow.delete(windowId);
+  if (!mRenderedOnDemand)
+    tabsHavingIndentLineForWindow.delete(windowId);
   applyStyles();
 });
 
@@ -521,8 +528,9 @@ function insertLineToTreeItem(treeItem, { created, rendered, recursive } = {}) {
     }
   }
 
-  const ids = tabsHavingIndentLineForWindow.get(treeItem.windowId);
+  const ids = mRenderedOnDemand && tabsHavingIndentLineForWindow.get(treeItem.windowId);
   if (!rendered &&
+      !mRenderedOnDemand &&
       ((ids && ids.has(treeItem.id)) ||
        (!created &&
         (treeItem.ancestorTabIds.length == 0 ||
@@ -531,10 +539,12 @@ function insertLineToTreeItem(treeItem, { created, rendered, recursive } = {}) {
 
   insertLineToTab(treeItem.id);
 
-  if (ids)
-    ids.add(treeItem.id);
-  else
-    tabsHavingIndentLineForWindow.set(treeItem.windowId, new Set([treeItem.id]));
+  if (!mRenderedOnDemand) {
+    if (ids)
+      ids.add(treeItem.id);
+    else
+      tabsHavingIndentLineForWindow.set(treeItem.windowId, new Set([treeItem.id]));
+  }
 
   reserveToUpdateActiveTreeStyle(treeItem.windowId);
 }
