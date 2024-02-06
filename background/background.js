@@ -253,6 +253,7 @@ const tabsHavingIndentLineForWindow = new Map();
 
 let mCanSendBulkMessages = false;
 let mRenderedOnDemand    = false;
+let mGetTreeType         = 'get-tree';
 
 async function registerToTST() {
   try {
@@ -270,6 +271,7 @@ async function registerToTST() {
           'tree-collapsed-state-changed',
         ],
         allowBulkMessaging: true,
+        lightTree: true,
       }),
       browser.runtime.sendMessage(TST_ID, {
         type: 'clear-all-extra-contents',
@@ -277,8 +279,14 @@ async function registerToTST() {
     ]);
     tabsHavingIndentLineForWindow.clear();
     tryReset();
-    if (TSTVersion && parseInt(TSTVersion.split('.')[0]) >= 4)
+    if (TSTVersion && parseInt(TSTVersion.split('.')[0]) >= 4) {
       mCanSendBulkMessages = mRenderedOnDemand = true;
+      mGetTreeType = 'get-light-tree';
+    }
+    else {
+      mCanSendBulkMessages = mRenderedOnDemand = false;
+      mGetTreeType = 'get-tree';
+    }
   }
   catch(_error) {
     // TST is not available
