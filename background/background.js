@@ -528,23 +528,28 @@ function insertLineToTreeItem(treeItem, { created, rendered, recursive } = {}) {
     }
   }
 
+
+  if (mRenderedOnDemand) {
+    if (rendered) {
+      insertLineToTab(treeItem.id);
+      reserveToUpdateActiveTreeStyle(treeItem.windowId);
+    }
+    return;
+  }
+
   const ids = mRenderedOnDemand && tabsHavingIndentLineForWindow.get(treeItem.windowId);
-  if (!rendered &&
-      !mRenderedOnDemand &&
-      ((ids && ids.has(treeItem.id)) ||
-       (!created &&
-        (treeItem.ancestorTabIds.length == 0 ||
-         treeItem.states.includes('collapsed')))))
+  if ((ids && ids.has(treeItem.id)) ||
+      (!created &&
+       (treeItem.ancestorTabIds.length == 0 ||
+        treeItem.states.includes('collapsed'))))
     return;
 
   insertLineToTab(treeItem.id);
 
-  if (!mRenderedOnDemand) {
-    if (ids)
-      ids.add(treeItem.id);
-    else
-      tabsHavingIndentLineForWindow.set(treeItem.windowId, new Set([treeItem.id]));
-  }
+  if (ids)
+    ids.add(treeItem.id);
+  else
+    tabsHavingIndentLineForWindow.set(treeItem.windowId, new Set([treeItem.id]));
 
   reserveToUpdateActiveTreeStyle(treeItem.windowId);
 }
