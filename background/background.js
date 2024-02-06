@@ -330,7 +330,7 @@ function onMessageExternal(message, sender) {
           break;
 
         case 'tree-attached':
-          insertLineToTreeItem(message.parent, { recursive: true });
+          insertLineToTreeItem(message.parent, { rendered: mRenderedOnDemand, recursive: true });
           reserveToUpdateActiveTreeStyle(message.tab.windowId);
           break;
 
@@ -339,7 +339,7 @@ function onMessageExternal(message, sender) {
           break;
 
         case 'tree-collapsed-state-changed':
-          insertLineToTreeItem(message.tab, { recursive: true });
+          insertLineToTreeItem(message.tab, { rendered: mRenderedOnDemand, recursive: true });
           reserveToUpdateActiveTreeStyle(message.tab.windowId);
           break;
       }
@@ -524,7 +524,7 @@ async function insertLineToWindow(windowId, tabs = null) {
 function insertLineToTreeItem(treeItem, { created, rendered, recursive } = {}) {
   if (recursive && treeItem.children) {
     for (const child of treeItem.children) {
-      insertLineToTreeItem(child, { recursive })
+      insertLineToTreeItem(child, { recursive, rendered: mRenderedOnDemand })
     }
   }
 
