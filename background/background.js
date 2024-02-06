@@ -507,7 +507,7 @@ async function insertLineToWindow(windowId, tabs = null) {
   if (!tabs)
     tabs = await browser.tabs.query({ windowId });
   const treeItems = await browser.runtime.sendMessage(TST_ID, {
-    type:     'get-tree',
+    type:     mGetTreeType,
     tabs:     tabs.map(tab => tab.id),
     windowId: window.id,
     rendered: true,
@@ -517,7 +517,7 @@ async function insertLineToWindow(windowId, tabs = null) {
   for (const treeItem of treeItems) {
     if (!treeItem)
       continue;
-    insertLineToTreeItem(treeItem);
+    insertLineToTreeItem(treeItem, { rendered: mRenderedOnDemand });
   }
 }
 
@@ -527,7 +527,6 @@ function insertLineToTreeItem(treeItem, { created, rendered, recursive } = {}) {
       insertLineToTreeItem(child, { recursive })
     }
   }
-
 
   if (mRenderedOnDemand) {
     if (rendered) {
