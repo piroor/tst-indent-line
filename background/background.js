@@ -435,7 +435,7 @@ function reserveToUpdateActiveTreeStyle(windowId) {
     }
 
     const [activeTreeItem, parentTreeItem] = await browser.runtime.sendMessage(TST_ID, {
-      type: 'get-tree',
+      type: mGetTreeType,
       tabs: [activeTab.id, `parent-of-${activeTab.id}`],
     });
     if (!activeTreeItem) {
