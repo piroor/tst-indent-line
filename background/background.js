@@ -8,6 +8,10 @@
 import {
   configs,
   log,
+  TST_ID,
+  WS_ID,
+  callTSTAPI,
+  getTSTVersion,
 } from '/common/common.js';
 
 const TST_ID = 'treestyletab@piro.sakura.ne.jp';
@@ -258,8 +262,8 @@ let mGetTreeType         = 'get-tree';
 async function registerToTST() {
   try {
     const [TSTVersion] = await Promise.all([
-      browser.runtime.sendMessage(TST_ID, { type: 'get-version' }),
-      browser.runtime.sendMessage(TST_ID, {
+      getTSTVersion(),
+      callTSTAPI({
         type: 'register-self' ,
         name: browser.i18n.getMessage('extensionName'),
         //icons: browser.runtime.getManifest().icons,
@@ -273,7 +277,7 @@ async function registerToTST() {
         allowBulkMessaging: true,
         lightTree: true,
       }),
-      browser.runtime.sendMessage(TST_ID, {
+      callTSTAPI({
         type: 'clear-all-extra-contents',
       }),
     ]);
@@ -305,6 +309,7 @@ configs.$addObserver(key => {
 function onMessageExternal(message, sender) {
   switch (sender.id) {
     case TST_ID:
+    case WS_ID:
       if (message && message.messages) {
         for (const oneMessage of message.messages) {
           onMessageExternal(oneMessage, sender);
@@ -351,7 +356,7 @@ browser.runtime.onMessageExternal.addListener(onMessageExternal);
 browser.tabs.onCreated.addListener(tab => {
   if (mRenderedOnDemand)
     return;
-  browser.runtime.sendMessage(TST_ID, {
+  callTSTAPI({
     type:     'get-tree' ,
     tab:      tab.id,
     windowId: tab.windowId,
@@ -434,7 +439,7 @@ function reserveToUpdateActiveTreeStyle(windowId) {
       return reserveToUpdateActiveTreeStyle(windowId);
     }
 
-    const [activeTreeItem, parentTreeItem] = await browser.runtime.sendMessage(TST_ID, {
+    const [activeTreeItem, parentTreeItem] = await callTSTAPI({
       type: mGetTreeType,
       tabs: [activeTab.id, `parent-of-${activeTab.id}`],
     });
@@ -480,7 +485,7 @@ function collectTabIds(treeItems, tabIds = []) {
 }
 
 function applyStyles() {
-  browser.runtime.sendMessage(TST_ID, {
+  callTSTAPI({
     type: 'register-self' ,
     style: `
       ${configs.autoShow ? AUTO_STYLE : ALWAYS_SHOW_STYLE}
@@ -506,7 +511,7 @@ tryReset.reserved = null;
 async function insertLineToWindow(windowId, tabs = null) {
   if (!tabs)
     tabs = await browser.tabs.query({ windowId });
-  const treeItems = await browser.runtime.sendMessage(TST_ID, {
+  const treeItems = await callTSTAPI({
     type:     mGetTreeType,
     tabs:     tabs.map(tab => tab.id),
     windowId: window.id,
@@ -575,11 +580,11 @@ function insertLineToTab(tabId) {
     const messages = [...mPendingInsertLineMessages.values()];
     mPendingInsertLineMessages.clear();
     if (mCanSendBulkMessages) {
-      browser.runtime.sendMessage(TST_ID, { messages });
+      callTSTAPI({ messages });
     }
     else {
       for (const message of messages) {
-        browser.runtime.sendMessage(TST_ID, message);
+        callTSTAPI(message);
       }
     }
   });
