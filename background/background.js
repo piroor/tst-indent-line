@@ -14,7 +14,6 @@ import {
   getTSTVersion,
 } from '/common/common.js';
 
-const TST_ID = 'treestyletab@piro.sakura.ne.jp';
 const BASE_STYLE = `
   :root {
     --highlighted-indent-level: -1;
