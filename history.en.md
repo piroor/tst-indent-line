@@ -1,6 +1,8 @@
 # History
 
  - master/HEAD
+ - 1.3.2 (2024.3.26)
+   * Add support for "Tabs Sidebar" of Watefox G6.0.10 and later.
  - 1.3.1 (2024.2.8)
    * Optimize for future releases of Tree Style Tab.
  - 1.3 (2024.2.2)
