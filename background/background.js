@@ -26,6 +26,7 @@ const BASE_STYLE = `
     --indent-level: 0;
     --indent-line-color: var(--tab-border);
     --indent-line-color-active: currentcolor;
+    --indent-line-size: var(--indent-size);
   }
   tab-item[data-level="1"] { --indent-level: 1; }
   tab-item[data-level="2"] { --indent-level: 2; }
@@ -145,7 +146,7 @@ const BASE_STYLE = `
       var(--indent-line-color) 0px,
       var(--indent-line-color) var(--indent-line-width),
       transparent var(--indent-line-width),
-      transparent var(--indent-size)
+      transparent var(--indent-line-size)
     );
     --indent-line-right: repeating-linear-gradient(
       to left,
@@ -153,34 +154,34 @@ const BASE_STYLE = `
       var(--indent-line-color) 0px,
       var(--indent-line-color) var(--indent-line-width),
       transparent var(--indent-line-width),
-      transparent var(--indent-size)
+      transparent var(--indent-line-size)
     );
     --indent-line-highlighted-left: linear-gradient(
       to right,
-      transparent calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active)),
-      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active))
+      transparent calc(var(--indent-line-size) * (var(--highlighted-indent-level))),
+      var(--indent-line-color-active) calc(var(--indent-line-size) * (var(--highlighted-indent-level))),
+      var(--indent-line-color-active) calc(var(--indent-line-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active)),
+      transparent calc(var(--indent-line-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active))
     );
     --indent-line-highlighted-right: linear-gradient(
       to left,
-      transparent calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level))),
-      var(--indent-line-color-active) calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active)),
-      transparent calc(var(--indent-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active))
+      transparent calc(var(--indent-line-size) * (var(--highlighted-indent-level))),
+      var(--indent-line-color-active) calc(var(--indent-line-size) * (var(--highlighted-indent-level))),
+      var(--indent-line-color-active) calc(var(--indent-line-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active)),
+      transparent calc(var(--indent-line-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active))
     );
   }
 
   :root.left tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
     --indent-line: var(--indent-line-left);
     --indent-line-highlighted: var(--indent-line-highlighted-left);
-    left: calc(var(--indent-size) * 0.75);
+    left: calc(var(--indent-line-size) * 0.75);
   }
 
   :root.right tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
     --indent-line: var(--indent-line-right);
     --indent-line-highlighted: var(--indent-line-highlighted-right);
-    right: calc(var(--indent-size) * 0.75);
+    right: calc(var(--indent-line-size) * 0.75);
   }
 
 
@@ -199,7 +200,7 @@ const BASE_STYLE = `
   :root.left:not(.shift-tabs-for-scrollbar-only-on-hover)
     #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned)
     ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    left: calc((var(--indent-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
+    left: calc((var(--indent-line-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
   :root.right.shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
@@ -208,7 +209,7 @@ const BASE_STYLE = `
   :root.right:not(.shift-tabs-for-scrollbar-only-on-hover)
     #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned)
     ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    right: calc((var(--indent-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
+    right: calc((var(--indent-line-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
   /*
@@ -223,11 +224,11 @@ const BASE_STYLE = `
   }
 
   :root.left tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% connector-line) {
-    left: calc((var(--indent-size) * 0.75) + calc(var(--indent-size) * (var(--indent-level) - 1)));
+    left: calc((var(--indent-line-size) * 0.75) + calc(var(--indent-line-size) * (var(--indent-level) - 1)));
   }
 
   :root.right tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% connector-line) {
-    right: calc((var(--indent-size) * 0.75) + calc(var(--indent-size) * (var(--indent-level) - 1)));
+    right: calc((var(--indent-line-size) * 0.75) + calc(var(--indent-line-size) * (var(--indent-level) - 1)));
   }
   */
 `;
