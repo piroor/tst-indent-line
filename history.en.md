@@ -1,6 +1,8 @@
 # History
 
  - master/HEAD
+ - 1.3.3 (2024.12.9)
+   * Make position and distance of indent lines customizable more easily via a custom property `--indent-line-size`. ([Contributed by MithicSpirit, thanks!](https://github.com/piroor/tst-indent-line/pull/10))
  - 1.3.2 (2024.3.26)
    * Add support for "Tabs Sidebar" of Watefox G6.0.10 and later.
  - 1.3.1 (2024.2.8)

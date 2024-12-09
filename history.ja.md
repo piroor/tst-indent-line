@@ -1,6 +1,8 @@
 # 更新履歴
 
  - master/HEAD
+ - 1.3.3 (2024.12.9)
+   * カスタムプロパティの`--indent-line-size`を用いて縦線の表示位置と間隔を簡単に変更できるようにした（[Contributed by MithicSpirit, thanks!](https://github.com/piroor/tst-indent-line/pull/10)）
  - 1.3.2 (2024.3.26)
    * Waterfox G6.0.10以降に含まれる「タブサイドバー」に対応
  - 1.3.1 (2024.2.8)
