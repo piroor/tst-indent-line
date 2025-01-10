@@ -184,7 +184,7 @@ const BASE_STYLE = `
   :root.right.rtl tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
     --indent-line: var(--indent-line-start);
     --indent-line-highlighted: var(--indent-line-highlighted-start);
-    inset-line-start: calc(var(--indent-line-size) * 0.75);
+    inset-inline-start: calc(var(--indent-line-size) * 0.75);
   }
 
   :root.right:not(.rtl) tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line),
