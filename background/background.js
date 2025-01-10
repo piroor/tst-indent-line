@@ -12,7 +12,6 @@ import {
   WS_ID,
   callTSTAPI,
   getTSTVersion,
-  isRTL,
 } from '/common/common.js';
 
 const BASE_STYLE = `
