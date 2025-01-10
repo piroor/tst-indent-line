@@ -12,6 +12,7 @@ import {
   WS_ID,
   callTSTAPI,
   getTSTVersion,
+  isRTL,
 } from '/common/common.js';
 
 const BASE_STYLE = `
@@ -130,8 +131,8 @@ const BASE_STYLE = `
 
   :root.animation tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
     transition: opacity var(--collapse-animation),
-                left var(--indent-animation),
-                right var(--indent-animation);
+                inset-inline-start var(--indent-animation),
+                inset-inline-end var(--indent-animation);
   }
 
   tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
@@ -140,31 +141,33 @@ const BASE_STYLE = `
     position: absolute;
     top: 0;
     width: var(--tab-indent);
-    --indent-line-left: repeating-linear-gradient(
-      to right,
+    --indent-line-direction-to-end: right;
+    --indent-line-direction-to-start: left;
+    --indent-line-start: repeating-linear-gradient(
+      to var(--indent-line-direction-to-end),
       transparent 0px,
       var(--indent-line-color) 0px,
       var(--indent-line-color) var(--indent-line-width),
       transparent var(--indent-line-width),
       transparent var(--indent-line-size)
     );
-    --indent-line-right: repeating-linear-gradient(
-      to left,
+    --indent-line-end: repeating-linear-gradient(
+      to var(--indent-line-direction-to-start),
       transparent 0px,
       var(--indent-line-color) 0px,
       var(--indent-line-color) var(--indent-line-width),
       transparent var(--indent-line-width),
       transparent var(--indent-line-size)
     );
-    --indent-line-highlighted-left: linear-gradient(
-      to right,
+    --indent-line-highlighted-start: linear-gradient(
+      to var(--indent-line-direction-to-end),
       transparent calc(var(--indent-line-size) * (var(--highlighted-indent-level))),
       var(--indent-line-color-active) calc(var(--indent-line-size) * (var(--highlighted-indent-level))),
       var(--indent-line-color-active) calc(var(--indent-line-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active)),
       transparent calc(var(--indent-line-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active))
     );
-    --indent-line-highlighted-right: linear-gradient(
-      to left,
+    --indent-line-highlighted-end: linear-gradient(
+      to var(--indent-line-direction-to-start),
       transparent calc(var(--indent-line-size) * (var(--highlighted-indent-level))),
       var(--indent-line-color-active) calc(var(--indent-line-size) * (var(--highlighted-indent-level))),
       var(--indent-line-color-active) calc(var(--indent-line-size) * (var(--highlighted-indent-level)) + var(--indent-line-width-active)),
@@ -172,16 +175,23 @@ const BASE_STYLE = `
     );
   }
 
-  :root.left tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    --indent-line: var(--indent-line-left);
-    --indent-line-highlighted: var(--indent-line-highlighted-left);
-    left: calc(var(--indent-line-size) * 0.75);
+  :root.rtl tab-item:not(.pinned):not(.collapsed) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+    --indent-line-direction-to-end: left;
+    --indent-line-direction-to-start: right;
   }
 
-  :root.right tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    --indent-line: var(--indent-line-right);
-    --indent-line-highlighted: var(--indent-line-highlighted-right);
-    right: calc(var(--indent-line-size) * 0.75);
+  :root.left:not(.rtl) tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line),
+  :root.right.rtl tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+    --indent-line: var(--indent-line-start);
+    --indent-line-highlighted: var(--indent-line-highlighted-start);
+    inset-line-start: calc(var(--indent-line-size) * 0.75);
+  }
+
+  :root.right:not(.rtl) tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line),
+  :root.left.rtl tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% indent-line) {
+    --indent-line: var(--indent-line-end);
+    --indent-line-highlighted: var(--indent-line-highlighted-end);
+    inset-inline-end: calc(var(--indent-line-size) * 0.75);
   }
 
 
@@ -194,22 +204,34 @@ const BASE_STYLE = `
     width: calc(var(--tab-indent) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
-  :root.left.shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
+  :root.left:not(.rtl).shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
     tab-item:not(.pinned):not(.collapsed)
     ::part(%EXTRA_CONTENTS_PART% indent-line),
-  :root.left:not(.shift-tabs-for-scrollbar-only-on-hover)
+  :root.left:not(.rtl):not(.shift-tabs-for-scrollbar-only-on-hover)
+    #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned)
+    ::part(%EXTRA_CONTENTS_PART% indent-line),
+  :root.right.rtl.shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
+    tab-item:not(.pinned):not(.collapsed)
+    ::part(%EXTRA_CONTENTS_PART% indent-line),
+  :root.right.rtl:not(.shift-tabs-for-scrollbar-only-on-hover)
     #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned)
     ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    left: calc((var(--indent-line-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
+    inset-inline-start: calc((var(--indent-line-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
-  :root.right.shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
+  :root.right:not(.rtl).shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
     tab-item:not(.pinned):not(.collapsed)
     ::part(%EXTRA_CONTENTS_PART% indent-line),
-  :root.right:not(.shift-tabs-for-scrollbar-only-on-hover)
+  :root.right:not(.rtl):not(.shift-tabs-for-scrollbar-only-on-hover)
+    #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned)
+    ::part(%EXTRA_CONTENTS_PART% indent-line),
+  :root.left.rtl.shift-tabs-for-scrollbar-only-on-hover.on-scrollbar-area:hover #tabbar.overflow.scrollbar-autohide
+    tab-item:not(.pinned):not(.collapsed)
+    ::part(%EXTRA_CONTENTS_PART% indent-line),
+  :root.left.rtl:not(.shift-tabs-for-scrollbar-only-on-hover)
     #tabbar.overflow.scrollbar-autohide tab-item:not(.pinned)
     ::part(%EXTRA_CONTENTS_PART% indent-line) {
-    right: calc((var(--indent-line-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
+    inset-inline-end: calc((var(--indent-line-size) * 0.75) + var(--shift-tabs-for-scrollbar-distance, var(--scrollbar-placeholder-size)));
   }
 
   /*
@@ -223,12 +245,14 @@ const BASE_STYLE = `
     width: var(--tab-indent);
   }
 
-  :root.left tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% connector-line) {
-    left: calc((var(--indent-line-size) * 0.75) + calc(var(--indent-line-size) * (var(--indent-level) - 1)));
+  :root.left:not(.rtl) tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% connector-line),
+  :root.right.rtl tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% connector-line) {
+    inset-inline-start: calc((var(--indent-line-size) * 0.75) + calc(var(--indent-line-size) * (var(--indent-level) - 1)));
   }
 
-  :root.right tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% connector-line) {
-    right: calc((var(--indent-line-size) * 0.75) + calc(var(--indent-line-size) * (var(--indent-level) - 1)));
+  :root.right:not(.rtl) tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% connector-line),
+  :root.left.rtl tab-item:not(.pinned) ::part(%EXTRA_CONTENTS_PART% connector-line) {
+    inset-inline-end: calc((var(--indent-line-size) * 0.75) + calc(var(--indent-line-size) * (var(--indent-level) - 1)));
   }
   */
 `;
