@@ -19,8 +19,7 @@ export const configs = new Configs({
   ]
 });
 
-export async function log(message, ...args)
-{
+export async function log(message, ...args) {
   const useConsole = configs && (await configs.$loaded) && configs.debug;
   if (!useConsole)
     return;

@@ -287,8 +287,8 @@ async function registerToTST() {
     const [TSTVersion] = await Promise.all([
       getTSTVersion(),
       callTSTAPI({
-        type: 'register-self' ,
-        name: browser.i18n.getMessage('extensionName'),
+        type:           'register-self',
+        name:           browser.i18n.getMessage('extensionName'),
         //icons: browser.runtime.getManifest().icons,
         listeningTypes: [
           'sidebar-show',
@@ -298,7 +298,7 @@ async function registerToTST() {
           'tree-collapsed-state-changed',
         ],
         allowBulkMessaging: true,
-        lightTree: true,
+        lightTree:          true,
       }),
       callTSTAPI({
         type: 'clear-all-extra-contents',
@@ -380,7 +380,7 @@ browser.tabs.onCreated.addListener(tab => {
   if (mRenderedOnDemand)
     return;
   callTSTAPI({
-    type:     'get-tree' ,
+    type:     'get-tree',
     tab:      tab.id,
     windowId: tab.windowId,
   }).then(treeItem => {
@@ -509,7 +509,7 @@ function collectTabIds(treeItems, tabIds = []) {
 
 function applyStyles() {
   callTSTAPI({
-    type: 'register-self' ,
+    type:  'register-self',
     style: `
       ${configs.autoShow ? AUTO_STYLE : ALWAYS_SHOW_STYLE}
       ${Array.from(stylesForWindow.values()).join('\n')}
