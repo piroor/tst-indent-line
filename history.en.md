@@ -1,6 +1,9 @@
 # History
 
  - master/HEAD
+ - 1.3.4 (2026.8.26)
+   * Add support for "Nova" theme of TST 4.4.0 and later.
+   * Switch UI direction on RTL environments (using language with right-to-left direction, like Arabian.)
  - 1.3.3 (2024.12.9)
    * Make position and distance of indent lines customizable more easily via a custom property `--indent-line-size`. ([Contributed by MithicSpirit, thanks!](https://github.com/piroor/tst-indent-line/pull/10))
  - 1.3.2 (2024.3.26)

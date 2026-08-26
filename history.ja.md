@@ -1,6 +1,9 @@
 # 更新履歴
 
  - master/HEAD
+ - 1.3.4 (2026.8.26)
+   * TST 4.4.0以降のNovaテーマに対応
+   * RTLの環境（アラビア語など、書字方向が右から左の言語の環境）でUIの方向を切り替えるようにした
  - 1.3.3 (2024.12.9)
    * カスタムプロパティの`--indent-line-size`を用いて縦線の表示位置と間隔を簡単に変更できるようにした（[Contributed by MithicSpirit, thanks!](https://github.com/piroor/tst-indent-line/pull/10)）
  - 1.3.2 (2024.3.26)
