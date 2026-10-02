@@ -1,6 +1,8 @@
 # History
 
  - master/HEAD
+ - 1.3.5 (2026.10.2)
+   * Fix invisible lines on themes with transparent tab borders.
  - 1.3.4 (2026.8.26)
    * Add support for "Nova" theme of TST 4.4.0 and later.
    * Switch UI direction on RTL environments (using language with right-to-left direction, like Arabian.)
