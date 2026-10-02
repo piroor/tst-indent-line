@@ -24,7 +24,7 @@ const BASE_STYLE = `
 
   tab-item {
     --indent-level: 0;
-    --indent-line-color: var(--tab-border, color-mix(in srgb, currentColor 35%, transparent));
+    --indent-line-color: color-mix(in srgb, currentColor 20%, transparent);
     --indent-line-color-active: currentcolor;
     --indent-line-size: var(--indent-size);
   }
